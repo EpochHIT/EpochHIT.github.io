@@ -6,6 +6,11 @@
   let height = 0;
   let nodes = [];
   let rafId = 0;
+  const pointer = {
+    x: 0,
+    y: 0,
+    active: false
+  };
 
   function resize() {
     const ratio = Math.min(window.devicePixelRatio || 1, 2);
@@ -34,6 +39,21 @@
 
     for (let i = 0; i < nodes.length; i += 1) {
       const a = nodes[i];
+      if (pointer.active) {
+        const px = pointer.x - a.x;
+        const py = pointer.y - a.y;
+        const pointerDistance = Math.hypot(px, py);
+        const pointerLimit = width < 700 ? 150 : 230;
+
+        if (pointerDistance > 0 && pointerDistance < pointerLimit) {
+          const pull = (1 - pointerDistance / pointerLimit) * 0.024;
+          a.vx += (px / pointerDistance) * pull;
+          a.vy += (py / pointerDistance) * pull;
+        }
+      }
+
+      a.vx *= 0.992;
+      a.vy *= 0.992;
       a.x += a.vx;
       a.y += a.vy;
 
@@ -58,6 +78,22 @@
           ctx.stroke();
         }
       }
+
+      if (pointer.active) {
+        const dx = a.x - pointer.x;
+        const dy = a.y - pointer.y;
+        const distance = Math.hypot(dx, dy);
+        const limit = width < 700 ? 132 : 196;
+
+        if (distance < limit) {
+          const alpha = (1 - distance / limit) * 0.42;
+          ctx.strokeStyle = `rgba(157, 242, 195, ${alpha})`;
+          ctx.beginPath();
+          ctx.moveTo(pointer.x, pointer.y);
+          ctx.lineTo(a.x, a.y);
+          ctx.stroke();
+        }
+      }
     }
 
     for (const node of nodes) {
@@ -70,6 +106,13 @@
       ctx.beginPath();
       ctx.arc(node.x, node.y, node.r, 0, Math.PI * 2);
       ctx.fill();
+    }
+
+    if (pointer.active) {
+      ctx.strokeStyle = "rgba(110, 231, 242, 0.28)";
+      ctx.beginPath();
+      ctx.arc(pointer.x, pointer.y, width < 700 ? 30 : 42, 0, Math.PI * 2);
+      ctx.stroke();
     }
 
     rafId = window.requestAnimationFrame(draw);
@@ -95,6 +138,17 @@
   document.getElementById("year").textContent = new Date().getFullYear();
 
   window.addEventListener("resize", resize);
+  window.addEventListener("pointermove", (event) => {
+    pointer.x = event.clientX;
+    pointer.y = event.clientY;
+    pointer.active = true;
+  });
+  window.addEventListener("pointerleave", () => {
+    pointer.active = false;
+  });
+  window.addEventListener("blur", () => {
+    pointer.active = false;
+  });
   resize();
 
   if (!prefersReducedMotion) {
