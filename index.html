@@ -1,0 +1,204 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Bai Minghui / EpochHIT - automation, robotics, sensor fusion, and research-oriented software.">
+    <meta name="theme-color" content="#071014">
+    <title>Bai Minghui | EpochHIT</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js" defer></script>
+    <script src="script.js" defer></script>
+  </head>
+  <body>
+    <canvas id="signal-field" aria-hidden="true"></canvas>
+
+    <header class="site-header" data-reveal>
+      <a class="brand" href="#top" aria-label="Bai Minghui home">
+        <span class="brand-mark">E</span>
+        <span>EpochHIT</span>
+      </a>
+      <nav class="nav-links" aria-label="Primary navigation">
+        <a href="#research">Research</a>
+        <a href="#projects">Projects</a>
+        <a href="#stack">Stack</a>
+        <a href="#contact">Contact</a>
+      </nav>
+    </header>
+
+    <main id="top">
+      <section class="hero section-band">
+        <div class="hero-copy" data-reveal>
+          <p class="eyebrow">Shandong University · Automation</p>
+          <h1>Bai Minghui builds intelligent systems where sensors, code, and control meet.</h1>
+          <p class="hero-text">
+            I am EpochHIT, an automation student exploring robotics perception,
+            multi-sensor calibration, SLAM, scientific visualization, and practical
+            research tooling.
+          </p>
+          <div class="hero-actions" aria-label="Profile links">
+            <a class="button primary" href="https://github.com/EpochHIT" target="_blank" rel="noreferrer">
+              <i data-lucide="github" aria-hidden="true"></i>
+              GitHub
+            </a>
+            <a class="button ghost" href="#projects">
+              <i data-lucide="folder-kanban" aria-hidden="true"></i>
+              View work
+            </a>
+          </div>
+        </div>
+
+        <aside class="profile-panel" data-reveal>
+          <img src="https://github.com/EpochHIT.png" alt="Bai Minghui GitHub avatar">
+          <div>
+            <p class="panel-kicker">Current signal</p>
+            <h2>Automation + robotics software</h2>
+            <p>Focused on turning raw motion, camera, and IMU data into dependable estimation systems.</p>
+          </div>
+          <dl class="stats-grid" aria-label="GitHub profile facts">
+            <div>
+              <dt>Repos</dt>
+              <dd>12</dd>
+            </div>
+            <div>
+              <dt>Base</dt>
+              <dd>SDU</dd>
+            </div>
+            <div>
+              <dt>Core</dt>
+              <dd>SLAM</dd>
+            </div>
+          </dl>
+        </aside>
+      </section>
+
+      <section id="research" class="section-band research-section">
+        <div class="section-heading" data-reveal>
+          <p class="eyebrow">Research Direction</p>
+          <h2>Academic, but not asleep.</h2>
+          <p>
+            The work is anchored in estimation and automation, with a bias toward
+            systems that can be measured, reproduced, and improved.
+          </p>
+        </div>
+
+        <div class="research-grid">
+          <article class="research-item" data-reveal>
+            <span class="item-index">01</span>
+            <h3>Visual-inertial estimation</h3>
+            <p>Optimization-based state estimation, camera and IMU fusion, and robust pose pipelines.</p>
+          </article>
+          <article class="research-item" data-reveal>
+            <span class="item-index">02</span>
+            <h3>Sensor calibration</h3>
+            <p>LiDAR-camera, RealSense, and motion sensor workflows for reliable robotics experiments.</p>
+          </article>
+          <article class="research-item" data-reveal>
+            <span class="item-index">03</span>
+            <h3>Research tooling</h3>
+            <p>Small tools for diagrams, data visualization, numerical exploration, and reproducible notes.</p>
+          </article>
+        </div>
+      </section>
+
+      <section id="projects" class="section-band projects-section">
+        <div class="section-heading" data-reveal>
+          <p class="eyebrow">Selected Repositories</p>
+          <h2>Code with a lab-bench heartbeat.</h2>
+          <p>Public projects from the GitHub profile, organized around robotics, tooling, and computation.</p>
+        </div>
+
+        <div class="project-grid">
+          <a class="project-card feature" href="https://github.com/EpochHIT/AVINS-Slam" target="_blank" rel="noreferrer" data-reveal>
+            <span class="project-meta">C++ · Robotics</span>
+            <h3>AVINS-Slam</h3>
+            <p>Optimization-based multi-sensor state estimator supporting visual-inertial input modes.</p>
+            <span class="project-link">Open repository <i data-lucide="arrow-up-right" aria-hidden="true"></i></span>
+          </a>
+
+          <a class="project-card" href="https://github.com/EpochHIT/livox_camera_calib" target="_blank" rel="noreferrer" data-reveal>
+            <span class="project-meta">C++ · Calibration</span>
+            <h3>livox_camera_calib</h3>
+            <p>Calibration experiments around MID-360 and D435i sensor setups.</p>
+            <span class="project-link">Open repository <i data-lucide="arrow-up-right" aria-hidden="true"></i></span>
+          </a>
+
+          <a class="project-card" href="https://github.com/EpochHIT/realsense-ros1" target="_blank" rel="noreferrer" data-reveal>
+            <span class="project-meta">C++ · ROS</span>
+            <h3>realsense-ros1</h3>
+            <p>ROS1-oriented RealSense package adjustments for practical robotics integration.</p>
+            <span class="project-link">Open repository <i data-lucide="arrow-up-right" aria-hidden="true"></i></span>
+          </a>
+
+          <a class="project-card" href="https://github.com/EpochHIT/MermaidToPng-Python" target="_blank" rel="noreferrer" data-reveal>
+            <span class="project-meta">Python · Tooling</span>
+            <h3>MermaidToPng-Python</h3>
+            <p>A lightweight utility for turning Mermaid diagrams into organized PNG outputs.</p>
+            <span class="project-link">Open repository <i data-lucide="arrow-up-right" aria-hidden="true"></i></span>
+          </a>
+
+          <a class="project-card" href="https://github.com/EpochHIT/MATLAB-ComplexPlot" target="_blank" rel="noreferrer" data-reveal>
+            <span class="project-meta">MATLAB · Visualization</span>
+            <h3>MATLAB-ComplexPlot</h3>
+            <p>Scientific plotting experiments for complex-number visualization and numerical insight.</p>
+            <span class="project-link">Open repository <i data-lucide="arrow-up-right" aria-hidden="true"></i></span>
+          </a>
+        </div>
+      </section>
+
+      <section id="stack" class="section-band stack-section">
+        <div class="section-heading" data-reveal>
+          <p class="eyebrow">Stack</p>
+          <h2>Built for experiments that move.</h2>
+        </div>
+
+        <div class="stack-layout" data-reveal>
+          <div class="stack-copy">
+            <p>
+              The toolbox follows the work: C++ for robotics performance, Python
+              for automation and research scripts, MATLAB for mathematical
+              exploration, and Vue for interfaces when results need a clean front door.
+            </p>
+          </div>
+          <ul class="skill-cloud" aria-label="Technical interests">
+            <li>C++</li>
+            <li>Python</li>
+            <li>MATLAB</li>
+            <li>ROS</li>
+            <li>SLAM</li>
+            <li>Sensor Fusion</li>
+            <li>Optimization</li>
+            <li>Visualization</li>
+            <li>Vue</li>
+          </ul>
+        </div>
+      </section>
+
+      <section id="contact" class="section-band contact-section">
+        <div class="contact-panel" data-reveal>
+          <p class="eyebrow">Contact</p>
+          <h2>Let the repository speak first.</h2>
+          <p>
+            Explore my public work, follow the experiments, or open a conversation
+            around robotics, automation, and research engineering.
+          </p>
+          <div class="hero-actions">
+            <a class="button primary" href="https://github.com/EpochHIT" target="_blank" rel="noreferrer">
+              <i data-lucide="github" aria-hidden="true"></i>
+              @EpochHIT
+            </a>
+            <a class="button ghost" href="http://www.sdu.edu.cn/" target="_blank" rel="noreferrer">
+              <i data-lucide="graduation-cap" aria-hidden="true"></i>
+              Shandong University
+            </a>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <span>© <span id="year"></span> Bai Minghui</span>
+      <span>Designed for GitHub Pages.</span>
+    </footer>
+  </body>
+</html>
