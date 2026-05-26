@@ -5,6 +5,7 @@
   let width = 0;
   let height = 0;
   let nodes = [];
+  let waves = [];
   let rafId = 0;
   const pointer = {
     x: 0,
@@ -21,6 +22,7 @@
     canvas.style.width = `${width}px`;
     canvas.style.height = `${height}px`;
     ctx.setTransform(ratio, 0, 0, ratio, 0, 0);
+    waves = [];
 
     const count = Math.max(36, Math.min(82, Math.floor(width / 18)));
     nodes = Array.from({ length: count }, (_, index) => ({
@@ -31,6 +33,47 @@
       r: index % 7 === 0 ? 2.2 : 1.35,
       hue: index % 3
     }));
+  }
+
+  function isReadingZone(target) {
+    if (!(target instanceof Element)) {
+      return true;
+    }
+
+    return Boolean(
+      target.closest(
+        [
+          ".site-header",
+          ".hero-copy",
+          ".profile-panel",
+          ".section-heading",
+          ".research-item",
+          ".project-card",
+          ".stack-layout",
+          ".contact-panel",
+          ".site-footer",
+          "a",
+          "button",
+          "input",
+          "textarea",
+          "select"
+        ].join(", ")
+      )
+    );
+  }
+
+  function addWave(x, y) {
+    waves.push({
+      x,
+      y,
+      radius: 0,
+      maxRadius: width < 700 ? 170 : 285,
+      speed: width < 700 ? 7.5 : 10.5
+    });
+
+    if (waves.length > 4) {
+      waves.shift();
+    }
   }
 
   function draw() {
@@ -52,8 +95,29 @@
         }
       }
 
+      for (const wave of waves) {
+        const wx = a.x - wave.x;
+        const wy = a.y - wave.y;
+        const waveDistance = Math.hypot(wx, wy);
+        const ringWidth = width < 700 ? 22 : 32;
+        const ringDelta = Math.abs(waveDistance - wave.radius);
+
+        if (waveDistance > 0 && ringDelta < ringWidth) {
+          const push = (1 - ringDelta / ringWidth) * (width < 700 ? 0.85 : 1.25);
+          a.vx += (wx / waveDistance) * push;
+          a.vy += (wy / waveDistance) * push;
+        }
+      }
+
       a.vx *= 0.992;
       a.vy *= 0.992;
+      const speed = Math.hypot(a.vx, a.vy);
+      const maxSpeed = width < 700 ? 2.2 : 3.1;
+      if (speed > maxSpeed) {
+        a.vx = (a.vx / speed) * maxSpeed;
+        a.vy = (a.vy / speed) * maxSpeed;
+      }
+
       a.x += a.vx;
       a.y += a.vy;
 
@@ -96,6 +160,16 @@
       }
     }
 
+    for (const wave of waves) {
+      const progress = wave.radius / wave.maxRadius;
+      const alpha = Math.max(0, (1 - progress) * 0.34);
+      ctx.strokeStyle = `rgba(110, 231, 242, ${alpha})`;
+      ctx.lineWidth = 1.35;
+      ctx.beginPath();
+      ctx.arc(wave.x, wave.y, wave.radius, 0, Math.PI * 2);
+      ctx.stroke();
+    }
+
     for (const node of nodes) {
       const colors = [
         "rgba(110, 231, 242, 0.78)",
@@ -108,12 +182,9 @@
       ctx.fill();
     }
 
-    if (pointer.active) {
-      ctx.strokeStyle = "rgba(110, 231, 242, 0.28)";
-      ctx.beginPath();
-      ctx.arc(pointer.x, pointer.y, width < 700 ? 30 : 42, 0, Math.PI * 2);
-      ctx.stroke();
-    }
+    waves = waves
+      .map((wave) => ({ ...wave, radius: wave.radius + wave.speed }))
+      .filter((wave) => wave.radius < wave.maxRadius);
 
     rafId = window.requestAnimationFrame(draw);
   }
@@ -141,7 +212,17 @@
   window.addEventListener("pointermove", (event) => {
     pointer.x = event.clientX;
     pointer.y = event.clientY;
+    pointer.active = !isReadingZone(event.target);
+  });
+  window.addEventListener("pointerdown", (event) => {
+    if (isReadingZone(event.target)) {
+      return;
+    }
+
+    pointer.x = event.clientX;
+    pointer.y = event.clientY;
     pointer.active = true;
+    addWave(event.clientX, event.clientY);
   });
   window.addEventListener("pointerleave", () => {
     pointer.active = false;
