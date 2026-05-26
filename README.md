@@ -1,4 +1,4 @@
-# EpochHIT.github.io
+# epochhit.github.io
 
 Personal GitHub Pages site for Bai Minghui / EpochHIT.
 
