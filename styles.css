@@ -411,6 +411,26 @@ h3 {
   font-size: 0.9rem;
 }
 
+.view-counter {
+  position: fixed;
+  right: 12px;
+  bottom: 10px;
+  z-index: 12;
+  display: inline-flex;
+  opacity: 0.46;
+  transition: opacity 160ms ease, transform 160ms ease;
+}
+
+.view-counter:hover {
+  opacity: 0.9;
+  transform: translateY(-1px);
+}
+
+.view-counter img {
+  display: block;
+  height: 20px;
+}
+
 [data-reveal] {
   opacity: 0;
   transform: translateY(18px);
@@ -486,6 +506,12 @@ h3 {
 
   .site-footer {
     flex-direction: column;
+  }
+
+  .view-counter {
+    right: 8px;
+    bottom: 8px;
+    opacity: 0.34;
   }
 }
 
