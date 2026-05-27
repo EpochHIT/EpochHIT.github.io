@@ -28,10 +28,16 @@
     nodes = Array.from({ length: count }, (_, index) => ({
       x: Math.random() * width,
       y: Math.random() * height,
-      vx: (Math.random() - 0.5) * 0.34,
-      vy: (Math.random() - 0.5) * 0.34,
-      r: index % 7 === 0 ? 2.2 : 1.35,
-      hue: index % 3
+      vx: (Math.random() - 0.5) * 0.42,
+      vy: (Math.random() - 0.5) * 0.42,
+      r: index % 7 === 0 ? 2.2 : 1.28 + Math.random() * 0.38,
+      hue: index % 3,
+      driftAngle: Math.random() * Math.PI * 2,
+      driftTurn: (Math.random() - 0.5) * 0.006,
+      baseSpeed: 0.1 + Math.random() * 0.34,
+      phase: Math.random() * Math.PI * 2,
+      twinkleSpeed: 0.55 + Math.random() * 1.4,
+      star: index % 11 === 0 || Math.random() > 0.86
     }));
   }
 
@@ -77,11 +83,16 @@
   }
 
   function draw() {
+    const now = performance.now() * 0.001;
     ctx.clearRect(0, 0, width, height);
     ctx.lineWidth = 1;
 
     for (let i = 0; i < nodes.length; i += 1) {
       const a = nodes[i];
+      a.driftAngle += a.driftTurn;
+      a.vx += Math.cos(a.driftAngle) * a.baseSpeed * 0.018;
+      a.vy += Math.sin(a.driftAngle) * a.baseSpeed * 0.018;
+
       if (pointer.active) {
         const px = pointer.x - a.x;
         const py = pointer.y - a.y;
@@ -109,13 +120,18 @@
         }
       }
 
-      a.vx *= 0.992;
-      a.vy *= 0.992;
+      a.vx *= 0.986;
+      a.vy *= 0.986;
       const speed = Math.hypot(a.vx, a.vy);
       const maxSpeed = width < 700 ? 2.2 : 3.1;
       if (speed > maxSpeed) {
         a.vx = (a.vx / speed) * maxSpeed;
         a.vy = (a.vy / speed) * maxSpeed;
+      }
+
+      if (speed < a.baseSpeed * 0.72) {
+        a.vx += Math.cos(a.driftAngle) * a.baseSpeed * 0.04;
+        a.vy += Math.sin(a.driftAngle) * a.baseSpeed * 0.04;
       }
 
       a.x += a.vx;
@@ -134,7 +150,8 @@
         const limit = width < 700 ? 118 : 156;
 
         if (distance < limit) {
-          const alpha = (1 - distance / limit) * 0.24;
+          const pulse = 0.78 + Math.sin(now * a.twinkleSpeed + a.phase) * 0.22;
+          const alpha = (1 - distance / limit) * 0.24 * pulse;
           ctx.strokeStyle = `rgba(110, 231, 242, ${alpha})`;
           ctx.beginPath();
           ctx.moveTo(a.x, a.y);
@@ -171,14 +188,28 @@
     }
 
     for (const node of nodes) {
+      const pulse = 0.68 + Math.sin(now * node.twinkleSpeed + node.phase) * 0.32;
       const colors = [
-        "rgba(110, 231, 242, 0.78)",
-        "rgba(157, 242, 195, 0.72)",
-        "rgba(255, 179, 145, 0.7)"
+        `rgba(110, 231, 242, ${0.58 + pulse * 0.26})`,
+        `rgba(157, 242, 195, ${0.52 + pulse * 0.24})`,
+        `rgba(255, 179, 145, ${0.5 + pulse * 0.24})`
       ];
+
+      if (node.star) {
+        const glow = 0.12 + pulse * 0.22;
+        const gradient = ctx.createRadialGradient(node.x, node.y, 0, node.x, node.y, node.r * 7.5);
+        gradient.addColorStop(0, `rgba(236, 247, 244, ${glow})`);
+        gradient.addColorStop(0.34, `rgba(110, 231, 242, ${glow * 0.45})`);
+        gradient.addColorStop(1, "rgba(110, 231, 242, 0)");
+        ctx.fillStyle = gradient;
+        ctx.beginPath();
+        ctx.arc(node.x, node.y, node.r * 7.5, 0, Math.PI * 2);
+        ctx.fill();
+      }
+
       ctx.fillStyle = colors[node.hue];
       ctx.beginPath();
-      ctx.arc(node.x, node.y, node.r, 0, Math.PI * 2);
+      ctx.arc(node.x, node.y, node.star ? node.r * (1.04 + pulse * 0.2) : node.r, 0, Math.PI * 2);
       ctx.fill();
     }
 
